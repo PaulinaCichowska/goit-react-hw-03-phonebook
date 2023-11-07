@@ -4,7 +4,7 @@ import css from '../ContactsList/ContactList.module.css'
 export const ContactListItem = ({ user, removeEvt }) => {
 
     return (
-        <li className={css.listItem} key={user.id}>
+        <li className={css.listItem}>
             {user.name}: {user.number}
             <button className={css.removeBtn} onClick={() => removeEvt(user.name)} type="button">REMOVE</button>
         </li>)
