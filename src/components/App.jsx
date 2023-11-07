@@ -16,14 +16,16 @@ export class App extends Component {
 
 
   state = {
+
     contacts: [],
     filter: '',
     ...initValues,
 
   }
-  //zadanie 3//
   async componentDidMount() {
+
     const contactsFromLocalStorage = localStorage.getItem("contacts")
+
     if (contactsFromLocalStorage !== null) {
       try {
         const parseContacts = JSON.parse(contactsFromLocalStorage)
