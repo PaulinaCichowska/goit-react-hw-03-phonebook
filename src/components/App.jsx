@@ -1,7 +1,7 @@
 
 import React, { Component } from "react";
 import { nanoid } from "nanoid";
-import { ContactsList } from "./ContactsList/ContactsList"
+import { ContactList } from "./ContactsList/ContactList"
 import { Filter } from "./Filter/Filter";
 import { ContactsForm } from "./ContactsForm/ContactsForm"
 import css from "./App.module.css"
@@ -16,39 +16,30 @@ export class App extends Component {
 
 
   state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
+    contacts: [],
     filter: '',
     ...initValues,
 
   }
   //zadanie 3//
-  setLocalStorage = () => {
-    localStorage.setItem("contacts", JSON.stringify(this.state.contacts))
+  async componentDidMount() {
+    const contactsFromLocalStorage = localStorage.getItem("contacts")
+    if (contactsFromLocalStorage !== null) {
+      try {
+        const parseContacts = JSON.parse(contactsFromLocalStorage)
+        this.setState({
+          contacts: parseContacts,
+        })
+      }
+      catch (error) {
+        console.log(error.name)
+      }
+    }
+
   }
 
   componentDidUpdate() {
-    this.setLocalStorage();
-  }
-
-  async componentDidMount() {
-    localStorage.setItem("contacts", [" "])
-    // dodane tutaj tej metody na potrzeby tego że dodane są kontakty od razu w stanie 
-    this.setLocalStorage();
-    //
-    const contactsFromLocalStorage = localStorage.getItem("contacts")
-    try {
-      const parseContacts = JSON.parse(contactsFromLocalStorage)
-      this.setState({
-        contacts: parseContacts,
-      })
-    }
-    catch (error) {
-    }
+    localStorage.setItem("contacts", JSON.stringify(this.state.contacts))
   }
   //koniec zadania 3//
 
@@ -110,7 +101,7 @@ export class App extends Component {
         <ContactsForm onSubmitForm={this.handleSubmit} onChangeForm={this.handleChange} inputName={name} inputNumber={number} />
         <h2 className={css.header}>Contacts</h2>
         <Filter value={filter} search={this.ToFind} />
-        <ContactsList contacts={this.FilteredContacts()} removeEvt={this.toRemove}></ContactsList>
+        <ContactList contacts={this.FilteredContacts()} removeEvt={this.toRemove}></ContactList>
       </div >
     );
   }
